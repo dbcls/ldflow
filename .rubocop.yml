@@ -1,0 +1,17 @@
+---
+inherit_from:
+  - .rubocop-disables.yml
+  - .rubocop-todo.yml
+
+require:
+  - rubocop-performance
+  - rubocop-rubycw
+
+AllCops:
+  TargetRubyVersion: 3.2
+  Exclude:
+    - 'tmp/**/*.rb'
+  NewCops: enable
+
+Layout/BeginEndAlignment:
+  EnforcedStyleAlignWith: begin
