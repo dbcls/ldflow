@@ -6,6 +6,8 @@ inherit_from:
 require:
   - rubocop-performance
   - rubocop-rubycw
+  - rubocop-rake
+  - rubocop-rspec
 
 AllCops:
   TargetRubyVersion: 3.2
