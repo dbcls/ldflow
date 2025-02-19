@@ -1,0 +1,3 @@
+[submodule "vendor/rdf-config"]
+	path = vendor/rdf-config
+	url = https://github.com/dbcls/rdf-config.git

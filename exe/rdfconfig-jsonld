@@ -1,4 +1,7 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require 'rdfconfig/jsonld'
+require 'bundler/setup'
+require 'rdfconfig/jsonld/cli'
+
+Rdfconfig::Jsonld::CLI::Main.start
