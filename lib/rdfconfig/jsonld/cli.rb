@@ -26,6 +26,12 @@ module Rdfconfig
         option :file_prefix, type: :string, default: 'output', desc: 'Prefix of output file name'
 
         def convert(file)
+          raise Error, '--header-lines=N must be greater than or equal to 1' unless options[:max_proc] >= 1
+          raise Error, '--lines=N must be greater than or equal to 100' unless options[:max_proc] >= 100
+          raise Error, '--max-proc=N must be greater than or equal to 1' unless options[:max_proc] >= 1
+
+          Jsonld.logger = Jsonld::Logger.new($stderr, level: ENV['LOG_LEVEL'] || ::Logger::INFO)
+
           require 'rdfconfig/jsonld/cli/convert_helper'
 
           self.class.include(ConvertHelper)
@@ -52,7 +58,9 @@ module Rdfconfig
 
           ARGV.clear
 
-          Object.include(Rdfconfig::Jsonld)
+          Jsonld.logger = Jsonld::Logger.new($stderr, level: Jsonld::Logger::DEBUG)
+
+          Object.include(Jsonld)
 
           IRB.start(__FILE__)
         end

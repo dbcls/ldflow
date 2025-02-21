@@ -19,7 +19,7 @@ module SplitFile
         end
       end
 
-      files << File.realpath(path)
+      files << path
 
       break if eof?
 
