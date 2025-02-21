@@ -13,9 +13,10 @@ module Rdfconfig
 
     require 'rdfconfig/jsonld/strategy/default_executor'
     require 'rdfconfig/jsonld/util/readable_duration'
-    require 'rdfconfig/jsonld/input_reader'
+    require 'rdfconfig/jsonld/reader'
     require 'rdfconfig/jsonld/logger'
     require 'rdfconfig/jsonld/runner'
+    require 'rdfconfig/jsonld/writer'
 
     # convert benchmark time to readable string
     Float.include(ReadableDuration)
@@ -39,12 +40,11 @@ module Rdfconfig
 
       Jsonld.logger.info { "Converting #{file} to #{options[:format]}" }
       Jsonld.logger.debug { "options: #{options}" }
-      convert = RDFConfig::Convert.new(config, convert_source: File.realpath(file), format: options[:format])
+      convert = RDFConfig::Convert.new(config, convert_source: file, format: options[:format])
 
       yield convert
     end
 
-    # @see https://github.com/dbcls/rdf-config/blob/master/lib/rdf-config/convert.rb
     def self.output_rdf_extension(format)
       case format
       when 'jsonl'

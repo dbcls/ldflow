@@ -11,11 +11,11 @@ module Rdfconfig
     File.include(CountLine, SplitFile)
     Zlib::GzipReader.include(CountLine, SplitFile)
 
-    class InputReader
+    class Reader
       class << self
         def from_path(path, &)
           case File.extname(path)
-          when '.tsv', '.csv'
+          when '.tsv', '.csv', '.jsonl'
             File.open(path, &)
           when '.gz'
             Zlib::GzipReader.open(path, &)

@@ -10,7 +10,7 @@ module Rdfconfig
           @files = files
         end
 
-        CLI_OPTIONS = %i[config_dir format output_dir file_prefix].freeze
+        CLI_OPTIONS = %i[config_dir format header_lines lines].freeze
         private_constant :CLI_OPTIONS
 
         # @return [Array<String>] path to output files
@@ -25,14 +25,16 @@ module Rdfconfig
         private
 
         def process(**options)
-          options = options.dup
-
           lambda do |file|
-            options[:output_dir] = File.basename(file, File.extname(file))
+            file_name = File.basename(file, File.extname(file))
+            ext = Jsonld.output_rdf_extension(options[:format])
+            output = File.join('out', "#{file_name}#{ext}")
 
-            CLI::Main.new([file], options.slice(*CLI_OPTIONS)).invoke(:convert)
+            opts = options.slice(*CLI_OPTIONS).merge(output:)
 
-            File.join(options[:output_dir], "#{options[:file_prefix]}#{Jsonld.output_rdf_extension(options[:format])}")
+            CLI::Convert.new.invoke(:table, :table, [file], opts)
+
+            output
           end
         end
       end

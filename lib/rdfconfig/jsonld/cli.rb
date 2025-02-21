@@ -7,6 +7,8 @@ require 'thor'
 module Rdfconfig
   module Jsonld
     module CLI
+      require 'rdfconfig/jsonld/cli/convert'
+
       class Main < Thor
         include Thor::Actions
 
@@ -16,32 +18,9 @@ module Rdfconfig
           end
         end
 
-        desc 'convert <FILE>', 'Convert to JSON-LD with RDF Config'
-        option :config_dir, aliases: '-c', type: :string, required: true, desc: 'Path to config directory'
-        option :format, aliases: '-f', type: :string, default: 'jsonl', enum: %w[jsonld json-ld json_ld jsonl rdf], desc: 'Output format'
-        option :header_lines, aliases: '-h', type: :numeric, default: 1, desc: 'Number of header lines'
-        option :lines, aliases: '-l', type: :numeric, default: 100, desc: 'Number of lines per batch'
-        option :max_proc, aliases: '-p', type: :numeric, default: 1, desc: 'Maximum number of processes'
-        option :output_dir, aliases: '-o', type: :string, default: Dir.pwd, desc: 'Path to output directory'
-        option :file_prefix, type: :string, default: 'output', desc: 'Prefix of output file name'
+        desc 'convert', 'Subcommands for file format conversion'
 
-        def convert(file)
-          raise Error, '--header-lines=N must be greater than or equal to 1' unless options[:max_proc] >= 1
-          raise Error, '--lines=N must be greater than or equal to 100' unless options[:max_proc] >= 100
-          raise Error, '--max-proc=N must be greater than or equal to 1' unless options[:max_proc] >= 1
-
-          Jsonld.logger = Jsonld::Logger.new($stderr, level: ENV['LOG_LEVEL'] || ::Logger::INFO)
-
-          require 'rdfconfig/jsonld/cli/convert_helper'
-
-          self.class.include(ConvertHelper)
-
-          if options[:max_proc] > 1 && InputReader.from_path(file).lines_exceed?(options[:header_lines] + options[:lines])
-            run_in_batch(file, **options.to_h)
-          else
-            convert_file(file, **options.to_h)
-          end
-        end
+        subcommand 'convert', Convert
 
         desc 'version', 'Show version number'
 
