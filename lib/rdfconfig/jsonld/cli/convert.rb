@@ -41,6 +41,24 @@ module Rdfconfig
             convert_file(file, **options.to_h)
           end
         end
+
+        desc 'jsonl <FILE>', 'Convert to JSON-LD with RDF Config'
+        option :format, aliases: '-f', type: :string, default: 'ntriples', enum: %w[ntriples], desc: 'Output format'
+        option :output, aliases: '-o', type: :string, desc: 'Path to the output'
+        option :preload, aliases: '-p', type: :string, desc: 'Path to a context file to preload'
+
+        def jsonl(file)
+          require 'rdfconfig/jsonld/cli/convert_helper'
+
+          self.class.include(ConvertHelper)
+
+          case options[:format]
+          when 'ntriples'
+            jsonl_to_ntriples(file, **options.to_h)
+          else
+            raise Error, "Not supported format: #{options[:format]}"
+          end
+        end
       end
     end
   end
