@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'tmpdir'
+require 'csv'
 
 module Rdfconfig
   module Jsonld
@@ -42,19 +43,24 @@ module Rdfconfig
           options = options.transform_keys(&:to_sym)
 
           Jsonld.rdf_config_convert(file, **options) do |conv|
-            stdout = $stdout.dup
-            stderr = $stderr.dup
-
             t = Benchmark.realtime do
               Writer.from_path(options[:output]) do |f|
-                $stdout.reopen(f)
-                $stderr.reopen(File::NULL)
-                conv.generate
+                sync = $stdout.sync
+
+                File.open(File::NULL, 'w') do |null|
+                  $stderr = null
+                  $stdout = f
+
+                  $stdout.sync = true if f.is_a?(Zlib::GzipWriter)
+
+                  conv.generate
+                ensure
+                  $stdout = STDOUT
+                  $stderr = STDERR
+                  $stdout.sync = sync
+                end
               end
             end
-
-            $stdout.reopen(stdout)
-            $stderr.reopen(stderr)
 
             Jsonld.logger.info { "Converted #{file} in #{t.readable_duration}" }
           end
@@ -75,7 +81,7 @@ module Rdfconfig
             JSON::LD::Context.add_preloaded(File.basename(options[:preload]), ctx)
           end
 
-          output = File.expand_path(options[:output])
+          output = options[:output] == '-' ? '-' : File.expand_path(options[:output])
 
           t = Benchmark.realtime do
             inside File.dirname(file) do
@@ -84,7 +90,7 @@ module Rdfconfig
                   f.each_line do |line|
                     graph = RDF::Graph.new
                     graph << JSON::LD::API.toRdf(JSON.parse(line))
-                    io << graph.dump(:ntriples)
+                    io << graph.dump(options[:format].to_sym)
                   end
                 end
               end

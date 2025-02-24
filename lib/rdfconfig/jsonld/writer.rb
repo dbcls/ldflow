@@ -7,6 +7,11 @@ module Rdfconfig
     class Writer
       class << self
         def from_path(path, &)
+          if path == '-'
+            yield $stdout
+            return
+          end
+
           case File.extname(path)
           when '.gz'
             Zlib::GzipWriter.open(path, &)
