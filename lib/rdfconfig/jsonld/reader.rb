@@ -20,7 +20,7 @@ module Rdfconfig
           when '.gz'
             Zlib::GzipReader.open(path, &)
           else
-            raise Error, 'Not supported file format.'
+            raise Error, "Not supported file format: #{File.extname(path)}"
           end
         end
       end

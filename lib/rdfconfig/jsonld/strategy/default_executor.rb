@@ -6,33 +6,32 @@ module Rdfconfig
   module Jsonld
     module Strategy
       class DefaultExecutor
-        def initialize(*files)
-          @files = files
+        def initialize(name, **options)
+          options = options.transform_keys(&:to_sym)
+
+          @name = name
+          @parallel = options[:max_proc] && options[:max_proc] > 1
+          @processes = options[:max_proc]
+          @cli_options = options[:cli] || {}
         end
 
-        CLI_OPTIONS = %i[config_dir format header_lines lines].freeze
-        private_constant :CLI_OPTIONS
-
         # @return [Array<String>] path to output files
-        def execute(**options)
-          if (max_proc = options[:max_proc] || 1) && max_proc.positive?
-            Parallel.map(@files, in_processes: max_proc, &process(**options))
+        def execute(*files, **_options)
+          if @parallel
+            Parallel.map(files, in_processes: @processes, &process)
           else
-            @files.map(&process(**options))
+            files.map(&process)
           end
         end
 
         private
 
-        def process(**options)
-          lambda do |file|
-            file_name = File.basename(file, File.extname(file))
-            ext = Jsonld.output_rdf_extension(options[:format])
-            output = File.join('out', "#{file_name}#{ext}")
+        def process
+          lambda do |f|
+            output = File.join('out', File.basename(f))
+            args = [[f], @cli_options.merge(output:)]
 
-            opts = options.slice(*CLI_OPTIONS).merge(output:)
-
-            CLI::Convert.new.invoke(:table, :table, [file], opts)
+            CLI::Convert.new.invoke(@name, *args)
 
             output
           end

@@ -4,7 +4,9 @@ require 'rdfconfig/jsonld/writer'
 
 module SplitFile
   def split(**options)
-    raise ArgumentError, '`header_lines` must be positive integer' unless options[:header_lines].positive?
+    options[:header_lines] ||= 0
+
+    raise ArgumentError, '`lines` must be greater than or equal to 0' unless options[:lines] >= 0
     raise ArgumentError, '`lines` must be positive integer' unless options[:lines].positive?
 
     headers = Array.new(options[:header_lines]).map { readline }.join

@@ -5,10 +5,11 @@ require 'zlib'
 module Rdfconfig
   module Jsonld
     class Runner
-      attr_reader :executor, :options
+      attr_reader :executor, :files, :options
 
-      def initialize(executor, **options)
+      def initialize(executor, *files, **options)
         @executor = executor
+        @files = files
         @options = options
       end
 
@@ -16,7 +17,7 @@ module Rdfconfig
         Jsonld.logger.info { "Running tasks with #{executor.class.name.split('::')[-1]}" }
         Jsonld.logger.debug { "options: #{options}" }
 
-        outputs = executor.execute(**options)
+        outputs = executor.execute(*files, **options)
 
         Jsonld.logger.info { "Merging #{outputs.size} outputs" }
 
