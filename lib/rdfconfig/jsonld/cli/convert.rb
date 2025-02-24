@@ -14,7 +14,8 @@ module Rdfconfig
 
         desc 'table <FILE>', 'Convert table format data to RDF with RDF Config'
         option :config_dir, aliases: '-c', type: :string, required: true, desc: 'Path to config directory'
-        option :format, aliases: '-f', type: :string, default: 'jsonl', enum: %w[jsonld json-ld json_ld jsonl rdf], desc: 'Output format'
+        option :format, aliases: '-f', type: :string, default: 'jsonl', enum: %w[jsonld json-ld json_ld jsonl rdf],
+                        desc: 'Output format'
         option :header_lines, aliases: '-L', type: :numeric, default: 1, desc: 'Number of header lines'
         option :lines, aliases: '-l', type: :numeric, default: 100, desc: 'Number of lines per batch'
         option :max_proc, aliases: '-p', type: :numeric, default: 1, desc: 'Maximum number of processes'

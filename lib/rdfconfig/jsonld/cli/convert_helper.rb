@@ -9,12 +9,6 @@ module Rdfconfig
         def run_in_batch(file, **options)
           options = options.transform_keys(&:to_sym)
 
-          if (ext = File.extname(file)) == '.gz'
-            ext = File.extname(File.basename(file, ext))
-          end
-
-          raise Error, "Failed to obtain extension: #{file}" if ext.empty?
-
           input = File.expand_path(file)
           output = File.expand_path(options[:output])
           config_dir = File.expand_path(options[:config_dir])
@@ -30,8 +24,7 @@ module Rdfconfig
 
                 files = Reader.from_path(input).split(header_lines: options[:header_lines],
                                                       lines: options[:lines],
-                                                      prefix: 'chunk_',
-                                                      suffix: ext)
+                                                      prefix: 'chunk_')
 
                 Jsonld.logger.info { "Split into #{files.size} files" }
 
