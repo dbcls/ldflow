@@ -68,7 +68,7 @@ module Ldflow
         end
       end
 
-      desc 'jsonl <FILE>', 'Convert to JSON-LD with RDF Config'
+      desc 'jsonl <FILE>', 'Convert JSON-LD lines to other RDF formats'
       option :format, aliases: '-f', type: :string, default: 'ntriples', enum: %w[ntriples], desc: 'Output format'
       option :lines, aliases: '-l', type: :numeric, default: 10_000, desc: 'Number of lines per batch'
       option :max_proc, aliases: '-p', type: :numeric, default: 1, desc: 'Maximum number of processes'
