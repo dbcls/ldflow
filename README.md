@@ -1,24 +1,114 @@
 # Ldflow
 
-TODO: Delete this and the text below, and describe your gem
+## Prerequisites
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/ldflow`. To experiment with that code, run `bin/console` for an interactive prompt.
+* ruby 3.2+
 
 ## Installation
 
-TODO: Replace `UPDATE_WITH_YOUR_GEM_NAME_PRIOR_TO_RELEASE_TO_RUBYGEMS_ORG` with your gem name right after releasing it to RubyGems.org. Please do not do it earlier due to security reasons. Alternatively, replace this section with instructions to install your gem from git if you don't plan to release to RubyGems.org.
+1. Clone the repository
 
-Install the gem and add to the application's Gemfile by executing:
+   Clone the repository and submodules at once by
 
-    $ bundle add UPDATE_WITH_YOUR_GEM_NAME_PRIOR_TO_RELEASE_TO_RUBYGEMS_ORG
+   ```shell
+   git clone --recurse-submodules https://github.com/dbcls/ldflow.git
+   ```
+   
+   or step by step
 
-If bundler is not being used to manage dependencies, install the gem by executing:
+   ```shell
+   git clone https://github.com/dbcls/ldflow.git
+   cd ldflow
+   git submodule update --init
+   ```
 
-    $ gem install UPDATE_WITH_YOUR_GEM_NAME_PRIOR_TO_RELEASE_TO_RUBYGEMS_ORG
+2. Install executable
+
+   ```shell
+   cd ldflow
+   rake install
+   ldflow version
+   ```
 
 ## Usage
 
-TODO: Write usage instructions here
+```shell
+ldflow help
+```
+
+```plain
+Commands:
+  ldflow convert         # Subcommands for file format conversion
+  ldflow help [COMMAND]  # Describe available commands or one specific command
+  ldflow version         # Show version number
+```
+
+### `convert jsonl`
+
+Convert JSON-LD lines to other RDF formats
+
+```plain
+Usage:
+  ldflow convert jsonl <FILE>
+
+Options:
+  -f, [--format=FORMAT]    # Output format
+                           # Default: ntriples
+                           # Possible values: ntriples
+  -l, [--lines=N]          # Number of lines per batch
+                           # Default: 10000
+  -p, [--max-proc=N]       # Maximum number of processes
+                           # Default: 1
+  -o, [--output=OUTPUT]    # Path to the output
+                           # Default: -
+      [--preload=PRELOAD]  # Path to a context file to preload
+```
+
+### `convert table`
+
+Convert table format data to RDF with RDF Config
+
+```plain
+Usage:
+  ldflow convert table <FILE> -c, --config-dir=CONFIG_DIR
+
+Options:
+  -c, --config-dir=CONFIG_DIR  # Path to config directory
+  -f, [--format=FORMAT]        # Output format
+                               # Default: jsonl
+                               # Possible values: jsonld, json-ld, json_ld, jsonl, rdf
+  -L, [--header-lines=N]       # Number of header lines
+                               # Default: 1
+  -l, [--lines=N]              # Number of lines per batch
+                               # Default: 100
+  -p, [--max-proc=N]           # Maximum number of processes
+                               # Default: 1
+  -o, [--output=OUTPUT]        # Path to the output
+                               # Default: -
+```
+
+## Update `rdf-config` submodule
+
+1. With an account that can push to GitHub
+
+    ```shell
+    cd path/to/ldflow
+    git pull origin main
+    cd vendor/rdf-config
+    git pull origin master
+    cd ../..
+    git add vendor/rdf-config
+    git commit -m 'update rdf-config'
+    git push origin main
+    ```
+
+2. On the server in the execution environment
+
+    ```shell
+    cd path/to/ldflow
+    git pull origin main
+    git submodule update
+    ```
 
 ## Development
 
