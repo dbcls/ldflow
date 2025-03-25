@@ -2,6 +2,6 @@
 # frozen_string_literal: true
 
 require 'bundler/setup'
-require 'rdfconfig/jsonld/cli'
+require 'ldflow/cli'
 
-Rdfconfig::Jsonld::CLI::Main.start
+Ldflow::CLI::Main.start

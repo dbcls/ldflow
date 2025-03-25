@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rdfconfig/jsonld/writer'
+require 'ldflow/writer'
 
 module SplitFile
   def split(**options)
@@ -14,7 +14,7 @@ module SplitFile
     files = []
     i = 0
     loop do
-      Rdfconfig::Jsonld::Writer.from_path((path = "#{options[:prefix]}#{i}#{options[:suffix]}")) do |f|
+      Ldflow::Writer.from_path((path = "#{options[:prefix]}#{i}#{options[:suffix]}")) do |f|
         f << headers
 
         each_line do |line|

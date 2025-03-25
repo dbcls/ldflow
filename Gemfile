@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-# Specify your gem's dependencies in rdfconfig-jsonld.gemspec
+# Specify your gem's dependencies in ldflow.gemspec
 gemspec
 
 gem 'rake', '~> 13.0'

@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require_relative 'lib/rdfconfig/jsonld/version'
+require_relative 'lib/ldflow/version'
 
 Gem::Specification.new do |spec|
-  spec.name = 'rdfconfig-jsonld'
-  spec.version = Rdfconfig::Jsonld::VERSION
+  spec.name = 'ldflow'
+  spec.version = Ldflow::VERSION
   spec.authors = ['Daisuke Satoh']
   spec.email = ['dsatoh@kamonohashi.co.jp']
 
