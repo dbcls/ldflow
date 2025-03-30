@@ -1,3 +1,6 @@
 [submodule "vendor/rdf-config"]
 	path = vendor/rdf-config
 	url = https://github.com/dbcls/rdf-config.git
+[submodule "vendor/superset"]
+	path = vendor/superset
+	url = https://github.com/apache/superset.git
