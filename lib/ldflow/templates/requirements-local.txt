@@ -1,0 +1,2 @@
+elasticsearch-dbapi
+psycopg2-binary
