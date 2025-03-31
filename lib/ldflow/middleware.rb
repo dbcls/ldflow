@@ -31,6 +31,10 @@ module Ldflow
         command(compose + ['version']).chomp
       end
 
+      def env
+        Dotenv.parse(Ldflow.home.join('.env'))
+      end
+
       def check
         check_container_running
       end
@@ -68,8 +72,6 @@ module Ldflow
       end
 
       def init_superset
-        env = Dotenv.parse(Ldflow.home.join('.env'))
-
         admin_password = env['SS_PASSWORD']
 
         raise Error, 'SS_PASSWORD is not set' unless admin_password && !admin_password.empty?
