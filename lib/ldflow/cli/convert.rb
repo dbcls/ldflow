@@ -43,8 +43,10 @@ module Ldflow
 
           run_in_batch(file, executor, **options.to_h)
         else
-          Ldflow.rdf_config_convert(file, **options) do |conv|
-            t = Benchmark.realtime do
+          Ldflow.logger.info { "Converting #{file} to #{options[:format]}" }
+
+          t = Benchmark.realtime do
+            RdfConfigProxy.new(File.expand_path(options[:config_dir])).convert(file, **options) do |conv|
               Writer.from_path(options[:output]) do |f|
                 sync = $stdout.sync
 
@@ -62,9 +64,9 @@ module Ldflow
                 end
               end
             end
-
-            Ldflow.logger.info { "Converted #{file} in #{t.readable_duration}" }
           end
+
+          Ldflow.logger.info { "Converted #{file} in #{t.readable_duration}" }
         end
       end
 

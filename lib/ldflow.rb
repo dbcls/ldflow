@@ -5,19 +5,18 @@ require_relative 'ldflow/version'
 require 'benchmark'
 
 module Ldflow
-  GEM_ROOT = File.expand_path('../../', File.dirname(__FILE__))
+  GEM_ROOT = File.expand_path('..', File.dirname(__FILE__))
+  HOME_DIRECTORY_NAME = '.ldflow'
   RDFCONFIG_LIB = File.join(GEM_ROOT, 'vendor', 'rdf-config', 'lib')
 
   class Error < StandardError; end
 
-  require 'ldflow/strategy/default_executor'
-  require 'ldflow/util/readable_duration'
-  require 'ldflow/reader'
-  require 'ldflow/logger'
-  require 'ldflow/runner'
-  require 'ldflow/writer'
+  def self.home
+    Pathname.new(Dir.home).join(HOME_DIRECTORY_NAME)
+  end
 
   # convert benchmark time to readable string
+  require 'ldflow/util/readable_duration'
   Float.include(ReadableDuration)
 
   def self.logger
@@ -29,29 +28,12 @@ module Ldflow
 
   module_function :logger=
 
-  # @see https://github.com/dbcls/rdf-config
-  def self.rdf_config_convert(file, **options, &)
-    $LOAD_PATH.unshift(RDFCONFIG_LIB) unless $LOAD_PATH.include?(RDFCONFIG_LIB)
-
-    require 'rdf-config'
-
-    config = RDFConfig::Config.new(options[:config_dir])
-
-    Ldflow.logger.info { "Converting #{file} to #{options[:format]}" }
-    Ldflow.logger.debug { "options: #{options}" }
-    convert = RDFConfig::Convert.new(config, convert_source: file, format: options[:format])
-
-    yield convert
-  end
-
-  def self.output_rdf_extension(format)
-    case format
-    when 'jsonl'
-      '.jsonl'
-    when 'jsonld', 'json-ld', 'json_ld'
-      '.jsonld'
-    else
-      '.ttl'
-    end
-  end
+  require 'ldflow/strategy/default_executor'
+  require 'ldflow/reader'
+  require 'ldflow/logger'
+  require 'ldflow/middleware'
+  require 'ldflow/models'
+  require 'ldflow/rdf_config_proxy'
+  require 'ldflow/runner'
+  require 'ldflow/writer'
 end
