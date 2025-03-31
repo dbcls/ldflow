@@ -13,13 +13,13 @@
    ```shell
    git clone --recurse-submodules https://github.com/dbcls/ldflow.git
    ```
-   
+
    or step by step
 
    ```shell
    git clone https://github.com/dbcls/ldflow.git
    cd ldflow
-   git submodule update --init
+   git submodule update --init --recursive
    ```
 
 2. Install executable
@@ -27,42 +27,16 @@
    ```shell
    cd ldflow
    rake install
-   ldflow version
+   ```
+
+3. Setup runtime environment
+
+   ```shell
+   ldflow setup
+   ldflow compose up -d
    ```
 
 ## Usage
-
-```shell
-ldflow help
-```
-
-```plain
-Commands:
-  ldflow convert         # Subcommands for file format conversion
-  ldflow help [COMMAND]  # Describe available commands or one specific command
-  ldflow version         # Show version number
-```
-
-### `convert jsonl`
-
-Convert JSON-LD lines to other RDF formats
-
-```plain
-Usage:
-  ldflow convert jsonl <FILE>
-
-Options:
-  -f, [--format=FORMAT]    # Output format
-                           # Default: ntriples
-                           # Possible values: ntriples
-  -l, [--lines=N]          # Number of lines per batch
-                           # Default: 10000
-  -p, [--max-proc=N]       # Maximum number of processes
-                           # Default: 1
-  -o, [--output=OUTPUT]    # Path to the output
-                           # Default: -
-      [--preload=PRELOAD]  # Path to a context file to preload
-```
 
 ### `convert table`
 
@@ -85,6 +59,27 @@ Options:
                                # Default: 1
   -o, [--output=OUTPUT]        # Path to the output
                                # Default: -
+```
+
+### `convert jsonl`
+
+Convert JSON-LD lines to other RDF formats
+
+```plain
+Usage:
+  ldflow convert jsonl <FILE>
+
+Options:
+  -f, [--format=FORMAT]    # Output format
+                           # Default: ntriples
+                           # Possible values: ntriples
+  -l, [--lines=N]          # Number of lines per batch
+                           # Default: 10000
+  -p, [--max-proc=N]       # Maximum number of processes
+                           # Default: 1
+  -o, [--output=OUTPUT]    # Path to the output
+                           # Default: -
+      [--preload=PRELOAD]  # Path to a context file to preload
 ```
 
 ## Update `rdf-config` submodule
