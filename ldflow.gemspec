@@ -26,6 +26,7 @@ Gem::Specification.new do |spec|
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
+  spec.add_dependency 'dotenv', '~> 3.1'
   spec.add_dependency 'json-ld', '~> 3.3'
   spec.add_dependency 'parallel', '~> 1.26'
   spec.add_dependency 'thor', '~> 1.2'
