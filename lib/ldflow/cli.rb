@@ -8,6 +8,7 @@ require 'thor'
 module Ldflow
   module CLI
     require 'ldflow/cli/convert'
+    require 'ldflow/cli/elasticsearch'
 
     class Main < Thor
       include Thor::Actions
@@ -75,6 +76,11 @@ module Ldflow
       desc 'convert', 'Subcommands for file format conversion'
 
       subcommand 'convert', Convert
+
+      desc 'elasticsearch', 'Subcommands for elasticsearch'
+      subcommand 'elasticsearch', Elasticsearch
+
+      map %w[es] => :elasticsearch
 
       desc 'version', 'Show version number'
 
